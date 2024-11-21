@@ -52,9 +52,9 @@ jobs:
           mkdir ~/dist
 
           # windows msvc
-          rm -rf ./build/*.dir
+          # rm -rf ./build/*.dir
 
-          cp ./build/*qjs* ~/dist
+          cp -r ./build/*qjs* ~/dist
           tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
 
       - name: Upload
