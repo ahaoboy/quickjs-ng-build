@@ -61,22 +61,22 @@ jobs:
             curl
             wget
       - name: build-${{ matrix.target }}
-        # if: matrix.os == windows-latest
-        shell: ${{ startsWith(runner.os, 'Windows') && 'msys2 {0}' || 'bash' }}
+        if: matrix.os == windows-latest
+        shell: "bash"
         run: |
           git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
           cd quickjs-ng
           cmake -S . -B build
           cmake --build build
 
-      # - name: build-${{ matrix.target }}
-      #   if: matrix.os != windows-latest
-      #   shell: msys2 {0}
-      #   run: |
-      #     git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
-      #     cd quickjs-ng
-      #     cmake -S . -B build
-      #     cmake --build build
+      - name: build-${{ matrix.target }}
+        if: matrix.os == windows-latest
+        shell: msys2 {0}
+        run: |
+          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
+          cd quickjs-ng
+          cmake -S . -B build
+          cmake --build build
 
       - name: tar
         run: |
