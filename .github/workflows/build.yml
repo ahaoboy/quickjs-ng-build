@@ -61,7 +61,7 @@ jobs:
             curl
             wget
       - name: build-${{ matrix.target }}
-        if: matrix.os == windows-latest
+        if: matrix.os != windows-latest
         shell: "bash"
         run: |
           git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
