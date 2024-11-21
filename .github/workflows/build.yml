@@ -26,7 +26,7 @@ jobs:
             os: macos-latest
           # - target: x86_64-pc-windows-msvc
           #   os: windows-latest
-          - target: x86_64-pc-windows-gnu
+          - target: x86_64-pc-windows-msvc
             os: windows-latest
           # - target: arm64ec-pc-windows-msvc
           #   os: windows-latest
@@ -41,23 +41,27 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: build-${{ matrix.target }}
     steps:
-          - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-          - name: build-${{ matrix.target }}
-            run: |
-                 git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
-                 cd quickjs-ng
-                 cmake -S . -B build
-                 cmake --build build
-                 mkdir ~/dist
-                 cp ./build/*qjs* ~/dist
-                 tar -czf ./qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
+      - name: build-${{ matrix.target }}
+        run: |
+          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
+          cd quickjs-ng
+          cmake -S . -B build
+          cmake --build build
+          mkdir ~/dist
 
-          - name: Upload
-            uses: actions/upload-artifact@v4
-            with:
-              name: qjs-ng-${{ matrix.target }}
-              path: ~/dist/qjs-ng-${{ matrix.target }}.tar.gz
+          # windows msvc
+          rm -rf ./build/*.dir
+
+          cp ./build/*qjs* ~/dist
+          tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: qjs-ng-${{ matrix.target }}
+          path: ~/qjs-ng-${{ matrix.target }}.tar.gz
   release:
     needs: build
     runs-on: ubuntu-latest
