@@ -43,18 +43,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: msys2/setup-msys2@v2
+        if: matrix.os == windows-latest
+        with:
+          msystem: MINGW64
+          update: true
+          path-type: inherit
+          install: >-
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-clang
+            mingw-w64-x86_64-perl
+            mingw-w64-x86_64-python3
+            zip
+            unzip
+            curl
+            wget
       - name: build-${{ matrix.target }}
+        # if: matrix.os == windows-latest
+        shell: ${{ matrix.os == windows-latest && "msys2 {0}" || 'bash' }}
         run: |
           git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
           cd quickjs-ng
           cmake -S . -B build
           cmake --build build
-          mkdir ~/dist
 
+      # - name: build-${{ matrix.target }}
+      #   if: matrix.os != windows-latest
+      #   shell: msys2 {0}
+      #   run: |
+      #     git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
+      #     cd quickjs-ng
+      #     cmake -S . -B build
+      #     cmake --build build
+
+      - name: tar
+        run: |
+          mkdir ~/dist
           # windows msvc
           # rm -rf ./build/*.dir
 
           cp -r ./build/*qjs* ~/dist
+
           tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
 
       - name: Upload
