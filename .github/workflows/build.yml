@@ -64,26 +64,34 @@ jobs:
         if: matrix.os != 'windows-latest'
         shell: "bash"
         run: |
-          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
+          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng --depth=1
           cd quickjs-ng
           cmake -S . -B build
           cmake --build build
+
+          mkdir ~/dist
+          # windows msvc
+          # rm -rf ./build/*.dir
+
+          cd quickjs-ng
+          cp -r ./build/*qjs* ~/dist
+
+          tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
 
       - name: build-${{ matrix.target }}
         if: matrix.os == 'windows-latest'
         shell: msys2 {0}
         run: |
-          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
+          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng --depth=1
           cd quickjs-ng
           cmake -S . -B build
           cmake --build build
 
-      - name: tar
-        run: |
           mkdir ~/dist
           # windows msvc
           # rm -rf ./build/*.dir
 
+          cd quickjs-ng
           cp -r ./build/*qjs* ~/dist
 
           tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
