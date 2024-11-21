@@ -73,7 +73,6 @@ jobs:
           # windows msvc
           # rm -rf ./build/*.dir
 
-          cd quickjs-ng
           cp -r ./build/*qjs* ~/dist
 
           tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
@@ -91,7 +90,6 @@ jobs:
           # windows msvc
           # rm -rf ./build/*.dir
 
-          cd quickjs-ng
           cp -r ./build/*qjs* ~/dist
 
           tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
