@@ -62,7 +62,7 @@ jobs:
             wget
       - name: build-${{ matrix.target }}
         # if: matrix.os == windows-latest
-        shell: ${{ runner.os == "Windows" && 'msys2 {0}' || 'bash' }}
+        shell: ${{ startsWith(runner.os, 'Windows') && 'msys2 {0}' || 'bash' }}
         run: |
           git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng
           cd quickjs-ng
