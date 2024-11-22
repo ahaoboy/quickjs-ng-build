@@ -69,13 +69,15 @@ jobs:
           cmake -S . -B build
           cmake --build build
 
-          mkdir ~/dist
+          mkdir ../dist
           # windows msvc
           # rm -rf ./build/*.dir
 
-          cp -r ./build/*qjs* ~/dist
+          cp -r ./build/*qjs* ../dist
 
-          tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
+          cd ..
+          tar -czf ./qjs-ng-${{ matrix.target }}.tar.gz -C ./dist .
+          ls -l ./qjs-ng-${{ matrix.target }}.tar.gz
 
       - name: build-windows
         if: matrix.os == 'windows-latest'
