@@ -92,7 +92,7 @@ jobs:
 
           cp -r ./build/*qjs* /tmp/dist
 
-          tar -czf /tmp/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
+          tar -czf /tmp/qjs-ng-${{ matrix.target }}.tar.gz -C /tmp/dist .
           ls -l /tmp/qjs-ng-${{ matrix.target }}.tar.gz
 
       - name: Upload
