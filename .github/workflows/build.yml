@@ -100,7 +100,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: qjs-ng-${{ matrix.target }}
-          path: ./dist/qjs-ng-${{ matrix.target }}.tar.gz
+          path: ./qjs-ng-${{ matrix.target }}.tar.gz
   release:
     needs: build
     runs-on: ubuntu-latest
