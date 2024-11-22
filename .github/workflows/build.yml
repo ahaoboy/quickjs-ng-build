@@ -86,20 +86,21 @@ jobs:
           cmake -S . -B build
           cmake --build build
 
-          mkdir /tmp/dist
+          mkdir ../dist
           # windows msvc
           # rm -rf ./build/*.dir
 
-          cp -r ./build/*qjs* /tmp/dist
+          cp -r ./build/*qjs* ../dist
 
-          tar -czf /tmp/qjs-ng-${{ matrix.target }}.tar.gz -C /tmp/dist .
-          ls -l /tmp/qjs-ng-${{ matrix.target }}.tar.gz
+          cd ..
+          tar -czf /tmp/qjs-ng-${{ matrix.target }}.tar.gz -C ./dist .
+          ls -l ./qjs-ng-${{ matrix.target }}.tar.gz
 
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: qjs-ng-${{ matrix.target }}
-          path: /tmp/qjs-ng-${{ matrix.target }}.tar.gz
+          path: ./dist/qjs-ng-${{ matrix.target }}.tar.gz
   release:
     needs: build
     runs-on: ubuntu-latest
