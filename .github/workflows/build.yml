@@ -77,7 +77,7 @@ jobs:
 
           tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
 
-      - name: build-${{ matrix.target }}
+      - name: build-windows
         if: matrix.os == 'windows-latest'
         shell: msys2 {0}
         run: |
@@ -86,19 +86,20 @@ jobs:
           cmake -S . -B build
           cmake --build build
 
-          mkdir ~/dist
+          mkdir /tmp/dist
           # windows msvc
           # rm -rf ./build/*.dir
 
-          cp -r ./build/*qjs* ~/dist
+          cp -r ./build/*qjs* /tmp/dist
 
-          tar -czf ~/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
+          tar -czf /tmp/qjs-ng-${{ matrix.target }}.tar.gz -C ~/dist .
+          ls -l /tmp/qjs-ng-${{ matrix.target }}.tar.gz
 
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: qjs-ng-${{ matrix.target }}
-          path: ~/qjs-ng-${{ matrix.target }}.tar.gz
+          path: /tmp/qjs-ng-${{ matrix.target }}.tar.gz
   release:
     needs: build
     runs-on: ubuntu-latest
