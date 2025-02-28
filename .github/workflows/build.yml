@@ -32,6 +32,8 @@ jobs:
     name: build-${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          repository: quickjs-ng/quickjs
 
       - uses: msys2/setup-msys2@v2
         if: matrix.os == 'windows-latest'
@@ -54,39 +56,13 @@ jobs:
         if: matrix.os != 'windows-latest'
         shell: "bash"
         run: |
-          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng --depth=1
-          cd quickjs-ng
-          cmake -S . -B build
-          cmake --build build
-
-          mkdir ../dist
-          # windows msvc
-          # rm -rf ./build/*.dir
-
-          cp -r ./build/*qjs* ../dist
-
-          cd ..
-          tar -czf ./qjs-${{ matrix.target }}.tar.gz -C ./dist .
-          ls -l ./qjs-${{ matrix.target }}.tar.gz
+          bash build.sh ${{ matrix.target }}
 
       - name: build-windows
         if: matrix.os == 'windows-latest'
         shell: msys2 {0}
         run: |
-          git clone https://github.com/quickjs-ng/quickjs.git quickjs-ng --depth=1
-          cd quickjs-ng
-          cmake -S . -B build
-          cmake --build build
-
-          mkdir ../dist
-          # windows msvc
-          # rm -rf ./build/*.dir
-
-          cp -r ./build/*qjs* ../dist
-
-          cd ..
-          tar -czf ./qjs-${{ matrix.target }}.tar.gz -C ./dist .
-          ls -l ./qjs-${{ matrix.target }}.tar.gz
+          bash build.sh ${{ matrix.target }}
 
       - name: Upload
         uses: actions/upload-artifact@v4
