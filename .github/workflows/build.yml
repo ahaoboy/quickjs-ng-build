@@ -32,9 +32,6 @@ jobs:
     name: build-${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          repository: quickjs-ng/quickjs
-
       - uses: msys2/setup-msys2@v2
         if: matrix.os == 'windows-latest'
         with:
